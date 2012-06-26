@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE repositories SYSTEM "/dtd/repositories.dtd">
+<repositories xmlns="" version="1.0">
+    <repo quality="experimental" status="unofficial">
+        <name><![CDATA[nana4gonta-prefix]]></name>
+        <description lang="en"><![CDATA[Personal User Overlay for Prefix]]></description>
+        <homepage>http://github.com/nana4gonta/nana4gonta-prefix</homepage>
+        <owner type="person">
+            <email>kazuhiro@rhodonit.com</email>
+            <name><![CDATA[Kazuhiro Karino]]></name>
+        </owner>
+        <source type="git">git://github.com/nana4gonta/nana4gonta-prefix.git</source>
+        <feed>http://github.com/nana4gonta/nana4gonta-prefix/commits/master.atom</feed>
+    </repo>
+</repositories>
+
+
