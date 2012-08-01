@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<herd>haskell</herd>
+	<maintainer>
+		<email>haskell@gentoo.org</email>
+	</maintainer>
+	<longdescription>
+		Fay is a proper subset of Haskell which can be compiled (type-checked)
+		with GHC, and compiled to JavaScript. It is lazy, pure, with a Fay monad,
+		an FFI, tail-recursion optimization (experimental). It implements no type
+		system, for type-checking you should use GHC.
+		
+		/Documentation/
+		
+		See documentation at &lt;http://fay-lang.org/&gt; or build your own documentation with:
+		
+		&gt; $ cabal unpack fay
+		&gt; $ cd fay-*
+		&gt; $ cabal install
+		&gt; $ dist/build/fay-docs/fay-docs
+		
+		
+		/Examples/
+		
+		See &lt;http://fay-lang.org/#examples&gt;.
+		
+		/Release Notes/
+		
+		Some more compilation options.
+		
+		* Optional flat function application (-flatten-apps).
+		
+		* Exporting-builtins is optional (-no-export-builtins).
+		
+		* The main module is annotated as a Closure \@constructor.
+		
+		See full history at: &lt;https://github.com/chrisdone/fay/commits&gt;
+	</longdescription>
+</pkgmetadata>
