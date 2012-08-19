@@ -1,0 +1,96 @@
+=== modified file 'lisp/term/ns-win.el'
+--- lisp/term/ns-win.el	2012-02-25 10:04:30 +0000
++++ lisp/term/ns-win.el	2012-05-17 06:21:33 +0000
+@@ -533,6 +533,12 @@
+   (interactive)
+   (ns-hide-others))
+ 
++(declare-function ns-fullscreen-toggle-cocoa "nsfns.m" ())
++
++(defun ns-fullscreen-toggle ()
++  (interactive)
++  (ns-fullscreen-toggle-cocoa))
++
+ (declare-function ns-emacs-info-panel "nsfns.m" ())
+ 
+ (defun ns-do-emacs-info-panel ()
+
+=== modified file 'src/nsfns.m'
+--- src/nsfns.m	2012-01-19 07:21:25 +0000
++++ src/nsfns.m	2012-05-17 06:21:33 +0000
+@@ -2175,6 +2175,28 @@
+   else
+     error ("%s", SDATA (result));
+ }
++
++DEFUN ("ns-fullscreen-toggle-cocoa", Fns_fullscreen_toggle_cocoa, Sns_fullscreen_toggle_cocoa,
++       0, 0, 0,
++       doc: /* Toggle cocoa full-screen. */)
++     (void)
++{
++  struct frame *sf;
++  check_ns ();
++  sf = SELECTED_FRAME ();
++  if(sf)
++    {
++      BLOCK_INPUT;
++      EmacsView *view = (EmacsView*)FRAME_NS_VIEW(sf);
++      EmacsWindow *window = (EmacsWindow*)[view window];
++      [window toggleFullScreen:nil];
++      
++      UNBLOCK_INPUT;
++    }
++
++  return Qnil;
++}
++
+ #endif
+ 
+ 
+@@ -2731,6 +2753,7 @@
+   defsubr (&Sns_list_colors);
+ #ifdef NS_IMPL_COCOA
+   defsubr (&Sns_do_applescript);
++  defsubr (&Sns_fullscreen_toggle_cocoa);
+ #endif
+   defsubr (&Sxw_color_defined_p);
+   defsubr (&Sxw_color_values);
+
+=== modified file 'src/nsterm.m'
+--- src/nsterm.m	2012-04-09 10:01:04 +0000
++++ src/nsterm.m	2012-05-17 06:21:33 +0000
+@@ -5507,6 +5507,12 @@
+   [win setAcceptsMouseMovedEvents: YES];
+   [win setDelegate: self];
+   [win useOptimizedDrawing: YES];
++  [win setCollectionBehavior:NSWindowCollectionBehaviorFullScreenPrimary];
++
++  NSApplicationPresentationOptions options = [NSApp currentSystemPresentationOptions];
++  [NSApp setPresentationOptions: options |
++         NSApplicationPresentationFullScreen |
++         NSApplicationPresentationAutoHideToolbar];
+ 
+   sz.width = FRAME_COLUMN_WIDTH (f);
+   sz.height = FRAME_LINE_HEIGHT (f);
+@@ -5567,6 +5573,21 @@
+   return self;
+ }
+ 
++- (void)windowWillEnterFullScreen:(NSNotification *)notification
++{
++  NSSize sz = [[self window] frame].size;
++  //[[self window] setToolbar: nil];
++  sz = [self windowWillResize: [self window] toSize: sz];;
++  [self windowDidResize:notification];
++}
++
++- (void)windowDidExitFullScreen:(NSNotification *)notification
++{
++  NSSize sz = [[self window] frame].size;
++  sz = [self windowWillResize: [self window] toSize: sz];;
++  [self windowDidResize:notification];
++  //[[self window] setToolbar: toolbar];
++}
+ 
+ - (void)windowDidMove: sender
+ {
