@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<herd>haskell</herd>
+	<maintainer>
+		<email>haskell@gentoo.org</email>
+	</maintainer>
+	<longdescription>
+		The @options@ package lets library and application developers easily work
+		with command-line options.
+		
+		The following example is a full program that can accept two options,
+		@--message@ and @--quiet@:
+		
+		@
+		&amp;#x7b;-\# LANGUAGE TemplateHaskell \#-&amp;#x7d;
+		
+		import Options
+		
+		defineOptions \&quot;MainOptions\&quot; $ do
+		&amp;#x20;   stringOption \&quot;optMessage\&quot; \&quot;message\&quot; \&quot;Hello world!\&quot;
+		&amp;#x20;       \&quot;A message to show the user.\&quot;
+		&amp;#x20;   boolOption \&quot;optQuiet\&quot; \&quot;quiet\&quot; False
+		&amp;#x20;       \&quot;Whether to be quiet.\&quot;
+		&amp;#x20;
+		main :: IO ()
+		main = runCommand $ \\opts args -&gt; do
+		&amp;#x20;   if optQuiet opts
+		&amp;#x20;       then return ()
+		&amp;#x20;       else putStrLn (optMessage opts)
+		@
+		
+		&gt;$ ./hello
+		&gt;Hello world!
+		&gt;$ ./hello --message=&#39;ciao mondo&#39;
+		&gt;ciao mondo
+		&gt;$ ./hello --quiet
+		&gt;$
+		
+		In addition, this library will automatically create documentation options
+		such as @--help@ and @--help-all@:
+		
+		&gt;$ ./hello --help
+		&gt;Help Options:
+		&gt;  -h, --help                  Show option summary.
+		&gt;  --help-all                  Show all help options.
+		&gt;
+		&gt;Application Options:
+		&gt;  --message                   A message to show the user.
+		&gt;  --quiet                     Whether to be quiet.
+	</longdescription>
+</pkgmetadata>
